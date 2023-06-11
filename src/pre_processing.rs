@@ -53,11 +53,8 @@ fn csv_str_to_point_vector(csv_str: String) -> PointVector {
         };
         // in future refactor this to consider parsing more data types
         point_vector.push(vec![
-            record[0].parse::<f32>().unwrap(),
             record[1].parse::<f32>().unwrap(),
-            record[2].parse::<f32>().unwrap(),
             record[3].parse::<f32>().unwrap(),
-            record[4].parse::<f32>().unwrap(),
         ]);
     }
 

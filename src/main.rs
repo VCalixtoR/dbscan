@@ -72,4 +72,20 @@ fn main() -> () {
         post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 1, 2, "Annual Income", "Spending Score", "Mall_Customers_AnnualIncomeXSpendingScore.png");
     }
     println!("\n---------------------");
+    // Circular_Generated - Used functions to generate database - https://oralytics.com/2021/10/18/dbscan-clustering-in-python/
+    {
+        // pre processing 
+        let used_collumns = vec![0, 1];
+        let parsed_database: PointVector = pre_processing::pre_process_database("Circular_Generated.csv", &used_collumns);
+        // data mining - kmeans
+        let mut cluster_group: PointVector = vec![
+            parsed_database[0].clone(),
+            parsed_database[1000].clone(),
+            parsed_database[2000].clone()
+        ];
+        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        // post processing
+        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
+        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Circular_Generated_xXy.png");
+    }
 }

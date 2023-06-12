@@ -4,12 +4,12 @@ use std::io::Read;
 use std::path::Path;
 
 // Pre-processing step, receives database file name and returns its data normalized
-pub fn pre_process_database(database_file_name: &str) -> PointVector {
+pub fn pre_process_database(database_file_name: &str, collumns: &Vec<usize>) -> PointVector {
     // converts database to str
     let database_csv_str: String = database_to_str(database_file_name);
 
     // converts str csv to point vector
-    let mut point_vector: PointVector = csv_str_to_point_vector(database_csv_str);
+    let mut point_vector: PointVector = csv_str_to_point_vector(database_csv_str, collumns);
 
     // normalizes the point vector
     normalize_point_vector(&mut point_vector);
@@ -39,9 +39,10 @@ fn database_to_str(database_file_name: &str) -> String {
 }
 
 // converts a string in csv format to PointVector
-fn csv_str_to_point_vector(csv_str: String) -> PointVector {
+fn csv_str_to_point_vector(csv_str: String, collumns: &Vec<usize>) -> PointVector {
     let mut reader = csv::Reader::from_reader(csv_str.as_bytes());
     let mut point_vector: PointVector = Vec::new();
+    let mut point_vector_pos: usize = 0;
 
     for raw_record in reader.records() {
         let record = match raw_record {
@@ -51,11 +52,12 @@ fn csv_str_to_point_vector(csv_str: String) -> PointVector {
                 error
             ),
         };
-        // in future refactor this to consider parsing more data types
-        point_vector.push(vec![
-            record[1].parse::<f32>().unwrap(),
-            record[3].parse::<f32>().unwrap(),
-        ]);
+        // parse given collumns, they must be floats
+        point_vector.push(Vec::new());
+        for col_pos in 0..collumns.len() {
+            point_vector[point_vector_pos].push(record[collumns[col_pos]].parse::<f32>().unwrap());
+        }
+        point_vector_pos += 1;
     }
 
     return point_vector;
@@ -87,12 +89,6 @@ fn normalize_point_vector(point_vector: &mut PointVector) -> () {
     for point_pos in 0..max_min_difference.len() {
         max_min_difference[point_pos] = max_point_values[point_pos] - min_point_values[point_pos];
     }
-
-    /*
-    println!("{:?}", min_point_values);
-    println!("{:?}", max_point_values);
-    println!("{:?}", max_min_difference);
-    */
 
     // Iterates in points to normalize: O(1n) considering entry points
     for vector_pos in 0..point_vector.len() {

@@ -3,13 +3,6 @@ use std::clone::Clone;
 pub type Point = Vec<f32>; // Each Point is an item of the dataset
 pub type PointVector = Vec<Point>; // PointVector is a collection of dataset items
 
-// used by Kmeans algorithm
-#[derive(Clone)]
-pub struct KmeansConfig {
-    pub centroid_points: PointVector, // defines k clusters
-    pub database_points: PointVector, // move database points to here
-}
-
 // enumerate point indexes types
 #[derive(Debug, PartialEq, Eq)]
 #[allow(dead_code)]

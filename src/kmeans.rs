@@ -21,7 +21,7 @@ pub fn calc_centroid_by_mean(database_points: &PointVector, centroid_points: &mu
     }
 }
 
-pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points: &PointVector) -> ClusterGroup {
+pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points: &PointVector, debug: bool) -> ClusterGroup {
     
     let mut cluster_group: ClusterGroup = ClusterGroup::new(centroid_points.len());
     let mut min_centroid_distance: f32;
@@ -29,7 +29,7 @@ pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points:
     let mut tmp_float: f32;
     let mut iteration: u32 = 0;
     
-    println!("Starting Kmeans");
+    println!("\nStarting Kmeans");
 
     // while centroid changes
     let mut cluster_group_has_changed: bool = true;
@@ -62,12 +62,13 @@ pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points:
         }
 
         println!("Iteration: {}", iteration);
-        println!("Centroids             = {:?}", &centroid_points);
         println!("Cluster Group changed = {}", cluster_group_has_changed);
-        println!("Cluster Group         : ");
-        cluster_group.print();
-
+        if debug {
+            println!("Centroids             = {:?}", &centroid_points);
+            println!("Cluster Group         : ");
+            cluster_group.print();
+        }
     }
-
+    println!();
     return cluster_group;
 }

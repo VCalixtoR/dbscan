@@ -5,6 +5,9 @@ use std::path::Path;
 
 // Pre-processing step, receives database file name and returns its data normalized
 pub fn pre_process_database(database_file_name: &str, collumns: &Vec<usize>) -> PointVector {
+
+    println!("\nStarting pre process to {}", database_file_name);
+
     // converts database to str
     let database_csv_str: String = database_to_str(database_file_name);
 
@@ -13,7 +16,8 @@ pub fn pre_process_database(database_file_name: &str, collumns: &Vec<usize>) -> 
 
     // normalizes the point vector
     normalize_point_vector(&mut point_vector);
-
+    
+    println!("Pre process Done!");
     return point_vector;
 }
 
@@ -44,6 +48,8 @@ fn csv_str_to_point_vector(csv_str: String, collumns: &Vec<usize>) -> PointVecto
     let mut point_vector: PointVector = Vec::new();
     let mut point_vector_pos: usize = 0;
 
+    println!("Converting csv to point vector...");
+
     for raw_record in reader.records() {
         let record = match raw_record {
             Ok(raw_record) => raw_record,
@@ -68,6 +74,8 @@ fn normalize_point_vector(point_vector: &mut PointVector) -> () {
     if point_vector.len() == 0 {
         panic!("Error: PointVector must have items");
     }
+
+    println!("Normalizing data...");
 
     // initialize temporary points to place min and max values of each attribute
     let mut min_point_values: Point = vec![f32::MAX; point_vector[0].len() as usize];

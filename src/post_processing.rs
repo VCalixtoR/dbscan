@@ -1,4 +1,5 @@
-use crate::configuration::{ ClusterGroup, PointVector };
+use crate::configuration::{ ClusterGroup, Point, PointVector };
+use crate::utils::euclidian_distance;
 use plotters::prelude::*;
 use std::path::Path;
 
@@ -45,7 +46,7 @@ pub fn parse_and_plot_cartesion_2d(cluster_group: &ClusterGroup, database: &Poin
             });
             cartesian_pos += 1;
             for core_pos in 0..cluster_group.clusters[cluster_pos].core_indexes.len() {
-                let database_point = database[cluster_group.clusters[cluster_pos].core_indexes[core_pos]].clone();
+                let database_point: Point = database[cluster_group.clusters[cluster_pos].core_indexes[core_pos]].clone();
                 cartesian_vector[cartesian_pos as usize].coordinate_vector.push( (database_point[att_1_pos], database_point[att_2_pos]) );
             }
         }
@@ -57,7 +58,7 @@ pub fn parse_and_plot_cartesion_2d(cluster_group: &ClusterGroup, database: &Poin
             });
             cartesian_pos += 1;
             for border_pos in 0..cluster_group.clusters[cluster_pos].border_indexes.len() {
-                let database_point = database[cluster_group.clusters[cluster_pos].border_indexes[border_pos]].clone();
+                let database_point: Point = database[cluster_group.clusters[cluster_pos].border_indexes[border_pos]].clone();
                 cartesian_vector[cartesian_pos as usize].coordinate_vector.push( (database_point[att_1_pos], database_point[att_2_pos]) );
             }
         }
@@ -72,7 +73,7 @@ pub fn parse_and_plot_cartesion_2d(cluster_group: &ClusterGroup, database: &Poin
         });
         cartesian_pos += 1;
         for outlier_pos in 0..cluster_group.outlier_indexes.len() {
-            let database_point = database[cluster_group.outlier_indexes[outlier_pos]].clone();
+            let database_point: Point = database[cluster_group.outlier_indexes[outlier_pos]].clone();
             cartesian_vector[cartesian_pos as usize].coordinate_vector.push( (database_point[att_1_pos], database_point[att_2_pos]) );
         }
     }
@@ -123,4 +124,94 @@ fn plot_cartesion_2d(cartesian_vector: &CartesianCoordVector, axis_x_label: &str
     image.present().expect("Unable to write result to file, please make sure 'plotters-doc-data' dir exists under current dir");
     println!("{} has been saved!", out_file_name);
     Ok(())
+}
+
+pub fn print_silhouette_coefficient(cluster_group: &ClusterGroup, database: &PointVector) -> () {
+
+    let mut global_coeficient:f32 = 0.0;
+    let mut global_obj_quantity: u32 = 0;
+    let mut cluster_coeficient: f32;
+    let mut cluster_obj_quantity: u32;
+
+    println!("Silhouette Coefficients:");
+
+    for cluster_index in 0..cluster_group.clusters.len() {
+        cluster_coeficient = 0.0;
+        cluster_obj_quantity = 0;
+
+        // core indexes
+        for core_index in 0..cluster_group.clusters[cluster_index].core_indexes.len() {
+            cluster_obj_quantity += 1;
+            cluster_coeficient += get_object_silhouette_coefficient(
+                cluster_group, 
+                database, 
+                cluster_group.clusters[cluster_index].core_indexes[core_index],
+                cluster_index
+            )
+        }
+        // border indexes
+        for border_index in 0..cluster_group.clusters[cluster_index].border_indexes.len() {
+            cluster_obj_quantity += 1;
+            cluster_coeficient += get_object_silhouette_coefficient(
+                cluster_group, 
+                database, 
+                cluster_group.clusters[cluster_index].border_indexes[border_index],
+                cluster_index
+            )
+        }
+        println!("    For C{} = {:.2}", cluster_index, cluster_coeficient/(cluster_obj_quantity as f32));
+        global_coeficient += cluster_coeficient;
+        global_obj_quantity += cluster_obj_quantity;
+    }
+    println!("    Global = {:.2}\n", global_coeficient / (global_obj_quantity as f32));
+}
+
+fn get_object_silhouette_coefficient(cluster_group: &ClusterGroup, database: &PointVector, obj_database_index: usize, obj_cluster_index: usize) -> f32 {
+
+    let database_point: Point = database[obj_database_index].clone();
+    let mut a_t: f32 = 0.0;
+    let mut b_t: f32 = f32::MAX;
+    let mut t_c: f32;
+
+    for cluster_index in 0..cluster_group.clusters.len() {
+        // core indexes
+        t_c = 0.0;
+        for core_index in 0..cluster_group.clusters[cluster_index].core_indexes.len() {
+            // a_t, if the object is not the same
+            if cluster_index == obj_cluster_index && 
+                obj_database_index != cluster_group.clusters[cluster_index].core_indexes[core_index] {
+                a_t += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
+            }
+            // t_c
+            else {
+                t_c += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
+            }
+        }
+        // border indexes
+        for border_index in 0..cluster_group.clusters[cluster_index].border_indexes.len() {
+            // a_t, if the object is not the same
+            if cluster_index == obj_cluster_index && 
+                obj_database_index != cluster_group.clusters[cluster_index].border_indexes[border_index] {
+                a_t += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
+            }
+            // t_c
+            else {
+                t_c += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
+            }
+        }
+        // a_t
+        if cluster_index == obj_cluster_index {
+            a_t = a_t / ((cluster_group.clusters[cluster_index].core_indexes.len() + 
+                cluster_group.clusters[cluster_index].border_indexes.len() - 1) as f32);
+        }
+        // b_t based on t_c
+        else {
+            t_c = t_c / ((cluster_group.clusters[cluster_index].core_indexes.len() + 
+            cluster_group.clusters[cluster_index].border_indexes.len()) as f32);
+            if b_t > t_c {
+                b_t = t_c;
+            }
+        }
+    }
+    return (b_t - a_t) / f32::max(a_t, b_t);
 }

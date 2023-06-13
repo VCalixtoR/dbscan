@@ -5,6 +5,7 @@ mod pre_processing;
 mod post_processing;
 mod utils;
 use configuration::{ ClusterGroup, PointVector };
+use std::io;
 
 fn main() -> () {
     // Each code block represents a different database
@@ -116,4 +117,9 @@ fn main() -> () {
         post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Km_Circular_Generated_xXy.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Db_Circular_Generated_xXy.png");
     }
+
+    println!("\nPress enter to exit: ");
+
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).ok();
 }

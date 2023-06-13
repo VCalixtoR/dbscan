@@ -4,12 +4,13 @@ pub type Point = Vec<f32>; // Each Point is an item of the dataset
 pub type PointVector = Vec<Point>; // PointVector is a collection of dataset items
 
 // enumerate point indexes types
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 #[allow(dead_code)]
-pub enum IndexType {
-    CoreIndex,
-    BorderIndex,
-    OutlierIndex,
+pub enum PointType {
+    Core,
+    Border,
+    Outlier,
+    Undefined,
 }
 // single cluster
 #[derive(Clone)]
@@ -41,23 +42,24 @@ impl ClusterGroup {
         };
         return cluster_group;
     }
-    // add a index with IndexType to a cluster, it not handles index duplicity for eficiency
-    pub fn add_index_to_cluster(&mut self, index_type: IndexType, index: usize, cluster_index: usize) -> () {
+    // add a index with PointType to a cluster, it not handles index duplicity for eficiency
+    pub fn add_index_to_cluster(&mut self, index_type: PointType, index: usize, cluster_index: usize) -> () {
 
-        if index_type != IndexType::OutlierIndex && cluster_index >= self.clusters.len() {
+        if index_type != PointType::Outlier && cluster_index >= self.clusters.len() {
             panic!("Error: Invalid cluster index while trying to add a index to a cluster: len={} index={}", self.clusters.len(), cluster_index);
         }
 
         match index_type {
-            IndexType::OutlierIndex => {
+            PointType::Outlier => {
                 self.outlier_indexes.push(index);
             },
-            IndexType::CoreIndex => {
+            PointType::Core => {
                 self.clusters[cluster_index].core_indexes.push(index);
             },
-            IndexType::BorderIndex =>{
+            PointType::Border =>{
                 self.clusters[cluster_index].border_indexes.push(index);
             },
+            _ => {}
         }
     }
     /* 

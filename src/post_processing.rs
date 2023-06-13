@@ -1,5 +1,5 @@
 use crate::configuration::{ ClusterGroup, Point, PointVector };
-use crate::utils::euclidian_distance;
+use crate::utils::euclidean_distance;
 use plotters::prelude::*;
 use std::path::Path;
 
@@ -126,14 +126,14 @@ fn plot_cartesion_2d(cartesian_vector: &CartesianCoordVector, axis_x_label: &str
     Ok(())
 }
 
-pub fn print_silhouette_coefficient(cluster_group: &ClusterGroup, database: &PointVector) -> () {
+pub fn print_silhouette_coefficient(cluster_group: &ClusterGroup, database: &PointVector, algorithm_name: &str) -> () {
 
     let mut global_coeficient:f32 = 0.0;
     let mut global_obj_quantity: u32 = 0;
     let mut cluster_coeficient: f32;
     let mut cluster_obj_quantity: u32;
 
-    println!("Silhouette Coefficients:");
+    println!("{}: Silhouette Coefficients:", algorithm_name);
 
     for cluster_index in 0..cluster_group.clusters.len() {
         cluster_coeficient = 0.0;
@@ -180,11 +180,11 @@ fn get_object_silhouette_coefficient(cluster_group: &ClusterGroup, database: &Po
             // a_t, if the object is not the same
             if cluster_index == obj_cluster_index && 
                 obj_database_index != cluster_group.clusters[cluster_index].core_indexes[core_index] {
-                a_t += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
+                a_t += euclidean_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
             }
             // t_c
             else {
-                t_c += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
+                t_c += euclidean_distance(&database_point, &database[cluster_group.clusters[cluster_index].core_indexes[core_index]]);
             }
         }
         // border indexes
@@ -192,11 +192,11 @@ fn get_object_silhouette_coefficient(cluster_group: &ClusterGroup, database: &Po
             // a_t, if the object is not the same
             if cluster_index == obj_cluster_index && 
                 obj_database_index != cluster_group.clusters[cluster_index].border_indexes[border_index] {
-                a_t += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
+                a_t += euclidean_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
             }
             // t_c
             else {
-                t_c += euclidian_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
+                t_c += euclidean_distance(&database_point, &database[cluster_group.clusters[cluster_index].border_indexes[border_index]]);
             }
         }
         // a_t

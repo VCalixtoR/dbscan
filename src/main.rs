@@ -1,4 +1,5 @@
 mod configuration;
+mod dbscan;
 mod kmeans;
 mod pre_processing;
 mod post_processing;
@@ -6,39 +7,52 @@ mod utils;
 use configuration::{ ClusterGroup, PointVector };
 
 fn main() -> () {
-
-    println!("\n---------------------");
+    // Each code block represents a different database
+    println!("\n--------------------- IrisReduced ---------------------");
     // IrisReduced - based on iris, removed major elements
     {
         // pre processing
         let used_collumns = vec![1, 3];
         let parsed_database: PointVector = pre_processing::pre_process_database("IrisReduced.csv", &used_collumns);
+        
         // data mining - kmeans
         let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[1].clone(), parsed_database[2].clone()];
-        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        // data mining - dbscan
+        let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.3, 3);
+        
         // post processing
-        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "IrisReduced_sepalXpetal.png");
+        post_processing::print_silhouette_coefficient(&kmeans_cluster_group, &parsed_database, "Kmeans");
+        post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Km_IrisReduced_sepalXpetal.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Db_IrisReduced_sepalXpetal.png");
     }
-    println!("\n---------------------");
+    println!("\n--------------------- Iris ---------------------");
     // Iris https://www.kaggle.com/datasets/uciml/iris
     {
         // pre processing
         let used_collumns = vec![1, 3];
         let parsed_database: PointVector = pre_processing::pre_process_database("Iris.csv", &used_collumns);
+        
         // data mining - kmeans
         let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[50].clone(), parsed_database[100].clone()];
-        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        // data mining - dbscan
+        let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.15, 7);
+        
         // post processing
-        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Iris_sepalXpetal.png");
+        post_processing::print_silhouette_coefficient(&kmeans_cluster_group, &parsed_database, "Kmeans");
+        post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Km_Iris_sepalXpetal.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Db_Iris_sepalXpetal.png");
     }
-    println!("\n---------------------");
+    println!("\n--------------------- Clustering gmm ---------------------");
     // Clustering_gmm https://www.kaggle.com/datasets/ankit8467/dataset-for-dbscan
     {
         // pre processing
         let used_collumns = vec![0, 1];
         let parsed_database: PointVector = pre_processing::pre_process_database("Clustering_gmm.csv", &used_collumns);
+        
         // data mining - kmeans
         let mut cluster_group: PointVector = vec![
             parsed_database[0].clone(),
@@ -47,12 +61,17 @@ fn main() -> () {
             parsed_database[30].clone(),
             parsed_database[40].clone(),
         ];
-        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        // data mining - dbscan
+        let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.035, 7);
+
         // post processing
-        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "Weight", "Height", "Clustering_gmm_WeightXHeight.png");
+        post_processing::print_silhouette_coefficient(&kmeans_cluster_group, &parsed_database, "Kmeans");
+        post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "Weight", "Height", "Km_Clustering_gmm_WeightXHeight.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "Weight", "Height", "Db_Clustering_gmm_WeightXHeight.png");
     }
-    println!("\n---------------------");
+    println!("\n--------------------- Mall_Customers ---------------------");
     // Mall_Customers https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python
     {
         // pre processing 
@@ -64,14 +83,20 @@ fn main() -> () {
             parsed_database[10].clone(),
             parsed_database[20].clone()
         ];
-        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.151, 4);
+        
         // post processing
-        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "Age", "Annual Income", "Mall_Customers_AgeXAnnualIncome.png");
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 2, "Age", "Spending Score", "Mall_Customers_AgeXSpendingScore.png");
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 1, 2, "Annual Income", "Spending Score", "Mall_Customers_AnnualIncomeXSpendingScore.png");
+        post_processing::print_silhouette_coefficient(&kmeans_cluster_group, &parsed_database, "Kmeans");
+        post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "Age", "Annual Income", "Km_Mall_Customers_AgeXAnnualIncome.png");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 2, "Age", "Spending Score", "Km_Mall_Customers_AgeXSpendingScore.png");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 1, 2, "Annual Income", "Spending Score", "Km_Mall_Customers_AnnualIncomeXSpendingScore.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "Age", "Annual Income", "Db_Mall_Customers_AgeXAnnualIncome.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 2, "Age", "Spending Score", "Db_Mall_Customers_AgeXSpendingScore.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 1, 2, "Annual Income", "Spending Score", "Db_Mall_Customers_AnnualIncomeXSpendingScore.png");
     }
-    println!("\n---------------------");
+    println!("\n--------------------- Circular Generated ---------------------");
     // Circular_Generated - Used functions to generate database - https://oralytics.com/2021/10/18/dbscan-clustering-in-python/
     {
         // pre processing 
@@ -83,9 +108,12 @@ fn main() -> () {
             parsed_database[1000].clone(),
             parsed_database[2000].clone()
         ];
-        let result_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
+        let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.025, 8);
         // post processing
-        post_processing::print_silhouette_coefficient(&result_cluster_group, &parsed_database);
-        post_processing::parse_and_plot_cartesion_2d(&result_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Circular_Generated_xXy.png");
+        post_processing::print_silhouette_coefficient(&kmeans_cluster_group, &parsed_database, "Kmeans");
+        post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
+        post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Km_Circular_Generated_xXy.png");
+        post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Db_Circular_Generated_xXy.png");
     }
 }

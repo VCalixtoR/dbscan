@@ -89,7 +89,6 @@ pub fn parse_database_and_plot_cartesion_2d(database: &PointVector, att_1_pos: u
 
     // creates cartesion_2d to params attributes
     for database_pos in 0..database.len(){
-        println!("{:?}", database[database_pos]);
         cartesian_vector.push( CartesianCoord {
             coordinate_vector: Vec::new(),
             color: DEFINED_COLORS[0],

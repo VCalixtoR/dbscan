@@ -6,8 +6,9 @@ No contexto foram abordadas duas técnicas de **agrupamento(clustering)**, **DBS
 
 ## Início rápido
 
-Para **execução** do projeto no sistema operacional windows ou linux/Fedora 30-36, executar o respectivo binário rust compilado na pasta bin.
-  - A execução irá realizar todas as etapas, pré-processamento, data mining e pós processamento slavando resultados na pasta postprocessing
+Para **execução** do projeto no sistema operacional windows ou linux/Fedora 30-36, executar o respectivo binário compilado na pasta bin, necessário a descompactação.
+  - A execução irá realizar todas as etapas, pré-processamento, data mining e pós processamento salvando resultados na pasta postprocessing dpresente na pasta do executável.
+  - Ex: Descompactar windows-release.zip ou fedora-release.zip seguido pela execução do arquivo executável nomeado dbscan.
 
 Para manipulações ao **código fonte** para compilação e execução utilizando ferramentas do rust:
   - Instale Rust em sua maquina

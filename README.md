@@ -16,8 +16,12 @@ Para manipulações ao **código fonte** para compilação e execução utilizan
 
 ### Dependencias
 
-* `rust` 1.70.0
+* rust 1.70.0
 * csv = "1.2.2"
 * plotters = "0.3.3"
 
 ### Alguns resultados
+
+<img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Db_Circular_Generated_xXy.png" width="350" height="350" > <img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Km_Circular_Generated_xXy.png" width="350" height="350">
+
+<img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Db_Clustering_gmm_WeightXHeight.png" width="350" height="350"> <img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Km_Clustering_gmm_WeightXHeight.png" width="350" height="350">

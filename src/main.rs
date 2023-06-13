@@ -27,6 +27,7 @@ fn main() -> () {
         post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
         post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Km_IrisReduced_sepalXpetal.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Db_IrisReduced_sepalXpetal.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "IrisReduced_sepalXpetal.png");
     }
     println!("\n--------------------- Iris ---------------------");
     // Iris https://www.kaggle.com/datasets/uciml/iris
@@ -46,6 +47,7 @@ fn main() -> () {
         post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
         post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Km_Iris_sepalXpetal.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Db_Iris_sepalXpetal.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Iris_sepalXpetal.png");
     }
     println!("\n--------------------- Clustering gmm ---------------------");
     // Clustering_gmm https://www.kaggle.com/datasets/ankit8467/dataset-for-dbscan
@@ -71,6 +73,7 @@ fn main() -> () {
         post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
         post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "Weight", "Height", "Km_Clustering_gmm_WeightXHeight.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "Weight", "Height", "Db_Clustering_gmm_WeightXHeight.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 1, "SepalLengthCm", "PetalLengthCm", "Clustering_gmm.png");
     }
     println!("\n--------------------- Mall_Customers ---------------------");
     // Mall_Customers https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python
@@ -96,6 +99,9 @@ fn main() -> () {
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "Age", "Annual Income", "Db_Mall_Customers_AgeXAnnualIncome.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 2, "Age", "Spending Score", "Db_Mall_Customers_AgeXSpendingScore.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 1, 2, "Annual Income", "Spending Score", "Db_Mall_Customers_AnnualIncomeXSpendingScore.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 1, "Age", "Annual Income", "Db_Mall_Customers_AgeXAnnualIncome.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 2, "Age", "Spending Score", "Db_Mall_Customers_AgeXSpendingScore.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 1, 2, "Annual Income", "Spending Score", "Db_Mall_Customers_AnnualIncomeXSpendingScore.png");
     }
     println!("\n--------------------- Circular Generated ---------------------");
     // Circular_Generated - Used functions to generate database - https://oralytics.com/2021/10/18/dbscan-clustering-in-python/
@@ -116,6 +122,8 @@ fn main() -> () {
         post_processing::print_silhouette_coefficient(&dbscan_cluster_group, &parsed_database, "DBSCAN");
         post_processing::parse_and_plot_cartesion_2d(&kmeans_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Km_Circular_Generated_xXy.png");
         post_processing::parse_and_plot_cartesion_2d(&dbscan_cluster_group, &parsed_database, 0, 1, "x_axis", "y_axis", "Db_Circular_Generated_xXy.png");
+        post_processing::parse_database_and_plot_cartesion_2d(&parsed_database, 0, 1, "x_axis", "y_axis", "Db_Circular_Generated_xXy.png");
+
     }
 
     println!("\nPress enter to exit: ");

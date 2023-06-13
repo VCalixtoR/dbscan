@@ -78,14 +78,34 @@ pub fn parse_and_plot_cartesion_2d(cluster_group: &ClusterGroup, database: &Poin
         }
     }
 
-    let _ = plot_cartesion_2d(&cartesian_vector, att_1_name, att_2_name, out_file_name);
+    let _ = plot_cartesion_2d(&cartesian_vector, att_1_name, att_2_name, out_file_name, "postprocessing");
 }
 
+// parses a database PointVector to plot a 2d cartesian view
+pub fn parse_database_and_plot_cartesion_2d(database: &PointVector, att_1_pos: usize, att_2_pos: usize, att_1_name: &str, att_2_name: &str, out_file_name: &str) -> () {
+
+    let mut cartesian_vector: CartesianCoordVector = Vec::new();
+    let mut cartesian_pos: usize = 0;
+
+    // creates cartesion_2d to params attributes
+    for database_pos in 0..database.len(){
+        cartesian_vector.push( CartesianCoord {
+            coordinate_vector: Vec::new(),
+            color: DEFINED_COLORS[0],
+        });
+        cartesian_vector[cartesian_pos].coordinate_vector.push( (database[database_pos][att_1_pos], database[database_pos][att_2_pos]) );
+        cartesian_pos += 1;
+    }
+
+    let _ = plot_cartesion_2d(&cartesian_vector, att_1_name, att_2_name, out_file_name, "postprocessing/datasets");
+}
+
+
 // plots a clusters 2d cartesian, only 2 attributes per image but multiple clusters
-fn plot_cartesion_2d(cartesian_vector: &CartesianCoordVector, axis_x_label: &str, axis_y_label: &str, out_file_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+fn plot_cartesion_2d(cartesian_vector: &CartesianCoordVector, axis_x_label: &str, axis_y_label: &str, out_file_name: &str, out_path_name: &str) -> Result<(), Box<dyn std::error::Error>> {
 
     // creates working path for windows and linux and converts to str
-    let output_path = Path::new(".").join("postprocessing").join(out_file_name);
+    let output_path = Path::new(".").join(out_path_name).join(out_file_name);
     let output_path_str = match output_path.to_str() {
         None => panic!("Error: Database_path is not a valid UTF-8 sequence"),
         Some(s) => s,

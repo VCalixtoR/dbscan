@@ -1,6 +1,7 @@
 use crate::configuration::{ ClusterGroup, PointType, Point, PointVector };
 use crate::utils::euclidean_distance;
 
+// do k-means clusterization with initial centroid points hyperparam
 pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points: &PointVector, debug: bool) -> ClusterGroup {
     
     let mut cluster_group: ClusterGroup = ClusterGroup::new(centroid_points.len());
@@ -8,7 +9,7 @@ pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points:
     let mut min_centroid_index: usize;
     let mut tmp_float: f32;
     let mut iteration: u32 = 0;
-    
+
     println!("\nStarting Kmeans");
 
     // while centroid changes
@@ -18,7 +19,7 @@ pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points:
 
         // temporary cluster group
         let mut tmp_cluster_group = ClusterGroup::new(centroid_points.len());
-
+        
         // foreach point
         for point_index in 0..database_points.len() {
             min_centroid_distance = f32::MAX;
@@ -53,6 +54,7 @@ pub fn kmeans_clusterization(centroid_points: &mut PointVector, database_points:
     return cluster_group;
 }
 
+// calculate new centroids positions based on average of its points
 fn calc_centroid_by_mean(database_points: &PointVector, centroid_points: &mut PointVector, cluster_group: &ClusterGroup) -> () {
 
     let mut cluster_sum: Point;
@@ -68,7 +70,8 @@ fn calc_centroid_by_mean(database_points: &PointVector, centroid_points: &mut Po
         }
         // assign average value to centroid
         for value_pos in 0..cluster_sum.len() {
-            centroid_points[cluster_pos][value_pos] = cluster_sum[value_pos] / (cluster_group.clusters[cluster_pos].core_indexes.len() as f32);
+            centroid_points[cluster_pos][value_pos] = cluster_sum[value_pos] / 
+            (cluster_group.clusters[cluster_pos].core_indexes.len() as f32);
         }
     }
 }

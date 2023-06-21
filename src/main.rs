@@ -17,7 +17,7 @@ fn main() -> () {
         let parsed_database: PointVector = pre_processing::pre_process_database("IrisReduced.csv", &used_collumns);
         
         // data mining - kmeans
-        let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[1].clone(), parsed_database[2].clone()];
+        let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[2].clone()];
         let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
         // data mining - dbscan
         let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.3, 3);
@@ -37,7 +37,7 @@ fn main() -> () {
         let parsed_database: PointVector = pre_processing::pre_process_database("Iris.csv", &used_collumns);
         
         // data mining - kmeans
-        let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[50].clone(), parsed_database[100].clone()];
+        let mut cluster_group: PointVector = vec![parsed_database[0].clone(), parsed_database[50].clone()];
         let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
         // data mining - dbscan
         let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.15, 7);
@@ -62,7 +62,6 @@ fn main() -> () {
             parsed_database[10].clone(),
             parsed_database[20].clone(),
             parsed_database[30].clone(),
-            parsed_database[40].clone(),
         ];
         let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
         // data mining - dbscan
@@ -85,7 +84,8 @@ fn main() -> () {
         let mut cluster_group: PointVector = vec![
             parsed_database[0].clone(),
             parsed_database[10].clone(),
-            parsed_database[20].clone()
+            parsed_database[20].clone(),
+            parsed_database[30].clone(),
         ];
         let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
         let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.151, 4);
@@ -113,7 +113,7 @@ fn main() -> () {
         let mut cluster_group: PointVector = vec![
             parsed_database[0].clone(),
             parsed_database[1000].clone(),
-            parsed_database[2000].clone()
+            parsed_database[2000].clone(),
         ];
         let kmeans_cluster_group: ClusterGroup = kmeans::kmeans_clusterization(&mut cluster_group, &parsed_database, false);
         let dbscan_cluster_group: ClusterGroup = dbscan::dbscan_clusterization(&parsed_database, 0.025, 8);

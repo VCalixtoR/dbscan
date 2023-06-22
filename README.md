@@ -6,7 +6,7 @@ Este repositório contém o trabalho final da disciplina de mineração de dados
 
 No contexto foram abordadas duas técnicas de **agrupamento(clustering)**, **DBSCAN** e **Kmeans**, estes foram implementados sem uso de bibliotecas terceiras na linguagem **Rust**, por ser uma linguagem bastante eficiente se comparado a outras linguagens usadas para data mining.
 
-Foram gerados binários para o **Windows e Fedora 38**, que podem ser executados sem a necessidade da instalção da linguagem Rust, para isso seguir as etapas na seção posterior.
+Foram gerados binários para o **Windows e Fedora 38**, que podem ser executados sem a necessidade da instalação da linguagem Rust, para isso seguir as etapas na seção posterior.
 
 ## Início rápido
 

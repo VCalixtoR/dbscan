@@ -1,6 +1,8 @@
-# Agrupamento de dados - DBSCAN e Kmeans
+# Agrupamento de dados - Kmeans e DBSCAN
 
 *Vinícius Calixto e Wellington Cesar*
+
+Link do repositório no GitHub: https://github.com/VCalixtoR/kmeansXdbscan
 
 Este repositório contém o trabalho final da disciplina de mineração de dados. O objetivo é a implementação e análise de resultados relacionados a mineração de dados utilizando algumas bases de dados.
 

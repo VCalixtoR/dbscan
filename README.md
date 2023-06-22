@@ -13,8 +13,8 @@ Foram gerados binários para o **Windows e Fedora 38**, que podem ser executados
 Para **execução** do projeto no sistema operacional windows ou linux/Fedora 30-36, executar o respectivo binário compilado na pasta bin **pelo terminal na pasta raiz do projeto**, caso for executado na pasta /bin será retornado problemas de diretório.
   - A execução irá realizar todas as etapas, pré-processamento, data mining e pós processamento salvando resultados na pasta postprocessing presente na pasta do executável.
   - Ex: Acessar no terminal a pasta root e escrever o comando:
-  - - Para Fedora: `./bin/fedora`
-  - - Para Windows: `.\bin\windows.exe`
+    - Para Fedora: `./bin/fedora`
+    - Para Windows: `.\bin\windows.exe`
   - **Atenção**: O pacote do fedora "fontconfig-devel" pode ser necessário para a compilação nesse sistema operacional.
   - Para visualizar a criação de arquivos na etapa de pós-processamento apagar os arquivos dentro da pasta postprocessing e executar o binário.
 
@@ -23,13 +23,13 @@ Para manipulações ao **código fonte** utilizando ferramentas do rust:
   - Clone este repositório
   - Na pasta do clone execute no terminal o comando `$cargo run` para compilação e execução do projeto
 
-### Dependencias
+## Dependencias
 
 * rust 1.70.0
 * csv = "1.2.2"
 * plotters = "0.3.3"
 
-### Alguns resultados
+## Alguns resultados
 
 <img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Db_Circular_Generated_xXy.png" width="350" height="350" > <img src="https://github.com/VCalixtoR/dbscan/blob/main/postprocessing/Km_Circular_Generated_xXy.png" width="350" height="350">
 
